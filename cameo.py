@@ -1,14 +1,23 @@
+#Cameo类，实现了视频流的截图、录屏、保存等操作。
 import cv2
 from managers import WindowManager, CaptureManager
+import filters
+import numpy
 class Cameo(object):
     def __init__(self):
         self._windowManager = WindowManager('Cameo', self.onKeypress)
         self._captureManager = CaptureManager(cv2.VideoCapture(0), self._windowManager, True)
+        self._curveFilter = filters.BGRPortraCurveFilter()
+
     def run(self):
         self._windowManager.createWindow()
         while self._windowManager.isWindowCreated:
             self._captureManager.enterFrame()
             frame = self._captureManager.enterFrame
+           
+           # filters.strokeEdges(frame_show,frame_show)
+           # self._curveFilter.apply(frame_show,frame)
+
             self._captureManager.exitFrame()
             self._windowManager.processEvents()
     def onKeypress(self,keycode):
